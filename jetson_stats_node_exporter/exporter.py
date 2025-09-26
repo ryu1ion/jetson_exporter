@@ -1,8 +1,8 @@
 from prometheus_client.core import GaugeMetricFamily
 from .logger import factory
 from .jtop_stats import JtopObservable
-
-
+import psutil
+from jtop import jtop
 class Jetson(object):
     def __init__(self, update_period=1):
 
@@ -14,7 +14,7 @@ class Jetson(object):
         self.disk = {}
         self.disk_units = "GB"
         self.interval = update_period
-
+        
     def update(self):
         self.jtop_stats = self.jtop_observer.read_stats()
         self.disk, self.disk_units = self.jtop_observer.get_storage_info()
@@ -26,7 +26,11 @@ class JetsonExporter(object):
         self.jetson = Jetson(update_period)
         self.logger = factory(__name__)
         self.name = "Jetson"
-
+        try:
+            nvmlInit()
+            self.nvml_available = True
+        except Exception:
+            self.nvml_available = False
     def __cpu(self):
         cpu_gauge = GaugeMetricFamily(
             name="cpu",
@@ -187,6 +191,42 @@ class JetsonExporter(object):
         )
         uptime_gauge.add_metric(["alive"], value=self.jetson.jtop_stats["upt"].total_seconds())
         return uptime_gauge
+    def __processes(self):
+        pid_cpu = GaugeMetricFamily(
+            "process_cpu_percent", "CPU usage per process (%)", labels=["pid", "name"]
+        )
+        pid_mem = GaugeMetricFamily(
+            "process_memory", "Memory RSS per process", labels=["pid", "name"], unit="kB"
+        )
+        pid_gpu_mem = GaugeMetricFamily(
+            "process_gpu_mem", "GPU memory per process", labels=["pid", "name"], unit="kB"
+        )
+        pid_gpu_util = GaugeMetricFamily(
+            "process_gpu_percent", "GPU utilization per process (%)", labels=["pid", "name"]
+        )
+
+        for p in self.jetson.jtop_observer.jetson.processes:
+            if len(p) > 8:
+                pid = str(p[0])
+                name = str(p[8]) 
+                cpu_percent = float(p[6])
+                mem_kb = float(p[7])
+                gpu_percent = 0.0
+                gpu_mem_kb = 0.0
+
+                gpu_info = p[4]  
+                if gpu_info and isinstance(gpu_info, dict):
+                    gpu_percent = float(gpu_info.get("util", 0))
+                    gpu_mem_kb = float(gpu_info.get("mem", 0)) * 1024
+
+                pid_cpu.add_metric([pid, name], cpu_percent)
+                pid_mem.add_metric([pid, name], mem_kb)
+                pid_gpu_util.add_metric([pid, name], gpu_percent)
+                pid_gpu_mem.add_metric([pid, name], gpu_mem_kb)
+
+
+        return [pid_cpu, pid_mem, pid_gpu_util, pid_gpu_mem]
+
 
     def collect(self):
         self.jetson.update()
@@ -201,3 +241,5 @@ class JetsonExporter(object):
         yield self.__integrated_power_total()
         yield self.__disk()
         yield self.__uptime()
+        for metric in self.__processes():
+            yield metric
