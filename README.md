@@ -29,28 +29,12 @@ jetson-stats-node-exporter==0.1.2
 ```
 are recommended
 
-### Install from git
 
-Installation with pip (no venv or conda due to jetson-stats dependency!): 
-```
-> export JSN_RELEASE="0.1.3"
-> sudo -H pip3 install -U https://github.com/laminair/jetson_stats_node_exporter/releases/download/$JSN_RELEASE/jetson_stats_node_exporter-$JSN_RELEASE-py3-none-any.whl
-```
-
-### Install from source
-Manual installation (may require sudo privileges due to jetson-stats dependency): 
-```
-> git clone https://github.com/laminair/jetson_stats_node_exporter.git
-> cd jetson_stats_node_exporter
-> uv sync
-```
-
-**Note:** This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
 
 ## Running the exporter
 After installation the project is available as python module. Run it as follows:
 ```
-python3 -m jetson_stats_node_exporter
+python3 -m jetson_stats_node_exporter --port 60010
 ```
 
 This will spawn a prometheus node exporter service on port 9100 and you'll be able to scrape all statistics.
