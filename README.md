@@ -10,8 +10,6 @@ We export the following metrics:
 - Component Temperature
 - Disk Utilization
 - System Uptime
-
-We do not export: 
 - Power consumption
 
 ## Installation
@@ -23,6 +21,13 @@ Make sure your local installation of jetson-stats is 4.3.2. Otherwise, you will 
 ```
 pip install jetson-stats-node-exporter==0.1.3
 ```
+
+### For compatibility with Jetson 5. 
+```
+jetson-stats==4.3.1 
+jetson-stats-node-exporter==0.1.2
+```
+are recommended
 
 ### Install from git
 
