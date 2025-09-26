@@ -105,5 +105,5 @@ When using docker, you may not be able to export disk statistics.
 Please see [this GitHub issue](https://github.com/laminair/jetson_stats_node_exporter/issues/7).
 
 ## Credits
-This repository is a modified version of [jetson_stats_node_exporter]([https://github.com/author/original-repo](https://github.com/laminair/jetson_stats_node_exporter/)).
+This repository is a modified version of [jetson_stats_node_exporter](https://github.com/laminair/jetson_stats_node_exporter).
 More information with per process (pid) are supported to be exported.
