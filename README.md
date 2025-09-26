@@ -105,4 +105,5 @@ When using docker, you may not be able to export disk statistics.
 Please see [this GitHub issue](https://github.com/laminair/jetson_stats_node_exporter/issues/7).
 
 ## Credits
-This project is based on https://github.com/lipovsek/jetson_prometheus_exporter, which uses tegrastats.
+This repository is a modified version of [jetson_stats_node_exporter]([https://github.com/author/original-repo](https://github.com/laminair/jetson_stats_node_exporter/)).
+More information with per process (pid) are supported to be exported.
