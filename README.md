@@ -95,4 +95,4 @@ Please see [this GitHub issue](https://github.com/laminair/jetson_stats_node_exp
 
 ## Credits
 This repository is a modified version of [jetson_stats_node_exporter](https://github.com/laminair/jetson_stats_node_exporter).
-More information with per process (pid) are supported to be exported.
+More metrics of per process (pid) are supported to be exported.
