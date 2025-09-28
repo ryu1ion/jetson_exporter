@@ -26,11 +26,7 @@ class JetsonExporter(object):
         self.jetson = Jetson(update_period)
         self.logger = factory(__name__)
         self.name = "Jetson"
-        try:
-            nvmlInit()
-            self.nvml_available = True
-        except Exception:
-            self.nvml_available = False
+        
     def __cpu(self):
         cpu_gauge = GaugeMetricFamily(
             name="cpu",
