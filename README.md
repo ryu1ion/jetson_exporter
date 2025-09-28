@@ -90,7 +90,7 @@ or use the context option in your docker-compose.yaml to specify the folder cont
 ```
 
 **Important Note:** 
-When using docker, you may not be able to export disk statistics. 
+When using docker, you may not be able to export disk statistics.  
 Please see [this GitHub issue](https://github.com/laminair/jetson_stats_node_exporter/issues/7).
 
 ## Credits
